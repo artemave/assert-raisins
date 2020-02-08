@@ -1,0 +1,14 @@
+{
+  "name": "require-all",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "barecolor": "^1.0.1"
+  }
+}

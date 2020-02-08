@@ -1,5 +1,6 @@
 const rgb = require('barecolor')
 const suites = []
+let only
 
 function getParentModuleName() {
   const caller = new Error().stack.split('\n')[4]
@@ -43,28 +44,43 @@ function prettyError(e) {
   console.info('\n')
 }
 
-module.exports = {
-  test(name, fn) {
-    const headline = getParentModule().filename.replace(process.cwd() + '/', '')
-    if (!suites[headline]) {
-      suites[headline] = []
-    }
-    suites[headline].push({name, fn})
-  },
+function test(name, fn) {
+  const headline = getParentModule().filename.replace(process.cwd() + '/', '')
+  if (!suites[headline]) {
+    suites[headline] = []
+  }
+  suites[headline].push({name, fn})
+}
 
+test.only = function(name, fn) {
+  only = {name, fn}
+}
+
+module.exports = {
+  test,
   async run() {
     const parentModule = getParentModule()
 
     if (!parentModule.parent) {
-      for (const headline in suites) {
-        rgb.cyan(headline + ' ')
+      if (only) {
+        rgb.cyan(only.name + ' ')
 
-        const [success, failure] = await runTests(suites[headline])
+        const [success] = await runTests([only])
 
-        if (failure) {
-          rgb.redln(`✗ ${success}/${failure}`)
-        } else {
-          rgb.greenln(` ✓ ${success}/0`)
+        if (success) {
+          rgb.greenln(' ✓')
+        }
+      } else {
+        for (const headline in suites) {
+          rgb.cyan(headline + ' ')
+
+          const [success, failure] = await runTests(suites[headline])
+
+          if (failure) {
+            rgb.redln(`✗ ${success}/${failure}`)
+          } else {
+            rgb.greenln(` ✓ ${success}/0`)
+          }
         }
       }
     }

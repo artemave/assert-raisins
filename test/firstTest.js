@@ -1,4 +1,4 @@
-const {test, run} = require('../runner')
+const {test, run} = require('..')
 const assert = require('assert')
 
 test('firstTest 1', () => {

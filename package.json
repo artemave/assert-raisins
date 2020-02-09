@@ -1,13 +1,11 @@
 {
-  "name": "require-all",
+  "name": "donc",
   "version": "1.0.0",
-  "description": "",
+  "description": "Minimalistic test runner that does NOT dynamically require test files. And so `donc --inspect-brk` will have all project files loaded.",
   "main": "index.js",
-  "scripts": {
-    "test": "test.sh"
-  },
-  "author": "",
-  "license": "ISC",
+  "bin": "bin/donc",
+  "author": "github.com/artemave",
+  "license": "MIT",
   "dependencies": {
     "barecolor": "^1.0.1"
   }

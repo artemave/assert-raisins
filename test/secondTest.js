@@ -1,4 +1,4 @@
-const {test} = require('../runner')
+const {test} = require('..')
 
 test('secondTest 1', () => {
   return 1

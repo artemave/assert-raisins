@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+function readlinkCompat() {
+  TARGET=$1
+
+  cd $(dirname "$TARGET")
+  TARGET=$(basename "$TARGET")
+
+  # Iterate down a (possible) chain of symlinks
+  while [ -L "$TARGET" ]
+  do
+    TARGET=$(readlink "$TARGET")
+    cd $(dirname "$TARGET")
+    TARGET=$(basename "$TARGET")
+  done
+
+  # Compute the canonicalized name by finding the physical path 
+  # for the directory we're in and appending the target file.
+  DIR=`pwd -P`
+  RESULT="$DIR/$TARGET"
+
+  echo $RESULT
+}
+
+# OSX does not have `readlink -f` hence using the hand rolled version.
+# script_dir="$(dirname "$(readlink -f "$0")")"
+SCRIPT_DIR="$(dirname "$(readlinkCompat "$0")")"
+JS_FILE_REGEX=".js$"
+CMD='node '
+
+for ARG in "$@"; do
+  if [[ $ARG =~ $JS_FILE_REGEX ]]; then
+    CMD="$CMD -r ./$ARG "
+  else
+    CMD="$CMD $ARG "
+  fi
+done
+
+eval "$CMD $SCRIPT_DIR/run.js"

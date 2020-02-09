@@ -1,6 +1,8 @@
 const rgb = require('barecolor')
 const suites = []
 let only
+let afterSuiteCallbacks = []
+let beforeSuiteCallbacks = []
 
 function getParentModuleName() {
   const caller = new Error().stack.split('\n')[4]
@@ -25,7 +27,7 @@ async function runTests(tests) {
       success++
 
     } catch(e) {
-      rgb.red(`\n\n! ${test.name} \n\n`)
+      rgb.red(`\n\n✗ ${test.name} \n\n`)
       prettyError(e)
       failure++
     }
@@ -58,8 +60,19 @@ test.only = function(name, fn) {
 
 module.exports = {
   test,
+
+  afterSuite(fn) {
+    afterSuiteCallbacks.push(fn)
+  },
+
+  beforeSuite(fn) {
+    beforeSuiteCallbacks.push(fn)
+  },
+
   async run() {
     const parentModule = getParentModule()
+
+    await Promise.all(beforeSuiteCallbacks.map(fn => fn()))
 
     if (!parentModule.parent) {
       if (only) {
@@ -83,6 +96,8 @@ module.exports = {
           }
         }
       }
+
+      await Promise.all(afterSuiteCallbacks.map(fn => fn()))
     }
   }
 }

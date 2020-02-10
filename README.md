@@ -8,7 +8,7 @@ Motivation: avoid dynamicly requiring test files. Why? So that `donc --inspect-b
 
 Install:
 
-    npm i --dev donc
+    npm i --save-dev donc
 
 Write a test `test/firstTest.js`:
 

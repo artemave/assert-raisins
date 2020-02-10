@@ -29,4 +29,4 @@ Run all tests:
 
     ./node_modules/.bin/donc test/**/*Test.js
 
-Other things available are: `test.only()`, `beforeAll()`, `afterAll()`, `beforeSuite()` and `afterSuite()`.
+Other things available: `test.only()`, `beforeAll()`, `afterAll()`, `beforeSuite()` and `afterSuite()`.

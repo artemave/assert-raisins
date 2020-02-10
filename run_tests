@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+for FILE in test/*Test.js; do
+  node $FILE
+done

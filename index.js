@@ -1,20 +1,25 @@
 const rgb = require('barecolor')
-const suites = []
-let only
+let suites = []
+let isOnly = false
 let afterSuiteCallbacks = []
 let beforeSuiteCallbacks = []
 
 function getParentModuleName() {
-  const caller = new Error().stack.split('\n')[4]
+  let stack = new Error().stack.split('\n')
+  stack.shift()
+  stack = stack.filter(line => !line.match(__filename))
+  const caller = stack.shift()
+
   let path = caller.split(' ').pop()
   path = path.replace(/^\(/, '')
   path = path.replace(/\)$/, '')
   path = path.replace(/:\d+:\d+$/, '')
+
   return path
 }
 
-function getParentModule(stack) {
-  return require.cache[getParentModuleName(stack)]
+function getParentModule() {
+  return require.cache[getParentModuleName()]
 }
 
 async function runTests(tests) {
@@ -46,16 +51,29 @@ function prettyError(e) {
   console.info('\n')
 }
 
-function test(name, fn) {
+function getCurrentSuite() {
   const headline = getParentModule().filename.replace(process.cwd() + '/', '')
+
   if (!suites[headline]) {
-    suites[headline] = []
+    suites[headline] = {
+      beforeAll: [],
+      afterAll: [],
+      tests: []
+    }
   }
-  suites[headline].push({name, fn})
+  return suites[headline]
+}
+
+function test(name, fn) {
+  if (!isOnly) {
+    getCurrentSuite().tests.push({name, fn})
+  }
 }
 
 test.only = function(name, fn) {
-  only = {name, fn}
+  suites = []
+  test(name, fn)
+  isOnly = true
 }
 
 module.exports = {
@@ -69,31 +87,33 @@ module.exports = {
     beforeSuiteCallbacks.push(fn)
   },
 
+  beforeAll(fn) {
+    getCurrentSuite().beforeAll.push(fn)
+  },
+
+  afterAll(fn) {
+    getCurrentSuite().afterAll.push(fn)
+  },
+
   async run() {
     const parentModule = getParentModule()
 
-    await Promise.all(beforeSuiteCallbacks.map(fn => fn()))
-
     if (!parentModule.parent) {
-      if (only) {
-        rgb.cyan(only.name + ' ')
+      await Promise.all(beforeSuiteCallbacks.map(fn => fn()))
 
-        const [success] = await runTests([only])
+      for (const headline in suites) {
+        rgb.cyan(headline + ' ')
 
-        if (success) {
-          rgb.greenln(' ✓')
-        }
-      } else {
-        for (const headline in suites) {
-          rgb.cyan(headline + ' ')
+        await Promise.all(suites[headline].beforeAll.map(fn => fn()))
 
-          const [success, failure] = await runTests(suites[headline])
+        const [success, failure] = await runTests(suites[headline].tests)
 
-          if (failure) {
-            rgb.redln(`✗ ${success}/${failure}`)
-          } else {
-            rgb.greenln(` ✓ ${success}/0`)
-          }
+        await Promise.all(suites[headline].afterAll.map(fn => fn()))
+
+        if (failure) {
+          rgb.redln(`✗ ${success}/${failure}`)
+        } else {
+          rgb.greenln(` ✓ ${success}/0`)
         }
       }
 

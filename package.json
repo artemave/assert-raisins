@@ -8,5 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "barecolor": "^1.0.1"
-  }
+  },
+  "devDependencies": {}
 }

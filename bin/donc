@@ -26,7 +26,7 @@ function readlinkCompat() {
 
 # OSX does not have `readlink -f` hence using the hand rolled version.
 # script_dir="$(dirname "$(readlink -f "$0")")"
-SCRIPT_DIR="$(dirname "$(readlinkCompat "$0")")"
+SCRIPT_DIR="$(dirname "$(readlinkCompat "$BASH_SOURCE")")"
 JS_FILE_REGEX=".js$"
 CMD='node '
 

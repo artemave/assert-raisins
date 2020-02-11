@@ -65,15 +65,15 @@ function getCurrentSuite() {
 }
 
 function test(name, fn) {
-  if (!isOnly) {
-    getCurrentSuite().tests.push({name, fn})
+  if (isOnly) {
+    suites = []
   }
+  getCurrentSuite().tests.push({name, fn})
 }
 
 test.only = function(name, fn) {
-  suites = []
-  test(name, fn)
   isOnly = true
+  test(name, fn)
 }
 
 module.exports = {

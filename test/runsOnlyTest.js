@@ -5,7 +5,7 @@
   let invoke = 0
 
   test.only('test 1', () => invoke++)
-
+  test.only('test 3', () => invoke++)
   test('test 2', async () => Promise.resolve(invoke++))
 
   await run()

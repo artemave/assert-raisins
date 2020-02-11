@@ -6,6 +6,10 @@
   "bin": "bin/donc",
   "author": "github.com/artemave",
   "license": "MIT",
+  "repository": "github:artemave/donc",
+  "scripts": {
+    "test": "./run_tests"
+  },
   "dependencies": {
     "barecolor": "^1.0.1"
   },

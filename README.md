@@ -29,4 +29,8 @@ Run all tests:
 
     ./node_modules/.bin/donc test/**/*Test.js
 
-Other things available: `test.only()`, `beforeAll()`, `afterAll()`, `beforeSuite()` and `afterSuite()`.
+Other things available: `test.only()`, `beforeAll()`, `afterAll()`, `beforeSuite()` and `afterSuite()`. There is also `it` which is an alias for `test`.
+
+`only` can also be passed from the command line:
+
+    ./node_modules/.bin/donc --only='firstTest 1' test/**/*.Test.js

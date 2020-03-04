@@ -2,6 +2,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+shopt -s extglob
+shopt -s globstar
+
 function readlinkCompat() {
   TARGET=$1
 
@@ -27,15 +30,21 @@ function readlinkCompat() {
 # OSX does not have `readlink -f` hence using the hand rolled version.
 # script_dir="$(dirname "$(readlink -f "$0")")"
 SCRIPT_DIR="$(dirname "$(readlinkCompat "$BASH_SOURCE")")"
-JS_FILE_REGEX=".js$"
+JS_FILE_REGEX='.js$'
+ONLY_REGEX='--only='
+ONLY_OPTION=''
 CMD='node '
 
-for ARG in "$@"; do
-  if [[ $ARG =~ $JS_FILE_REGEX ]]; then
+for ARG in $@; do
+  if [[ $ARG =~ $ONLY_REGEX ]]; then
+    ONLY_OPTION=${ARG#--only=}
+    ONLY_OPTION=`printf "%q" "$ONLY_OPTION"`
+    ONLY_OPTION="--only=$ONLY_OPTION"
+  elif [[ $ARG =~ $JS_FILE_REGEX ]]; then
     CMD="$CMD -r ./$ARG "
   else
     CMD="$CMD $ARG "
   fi
 done
 
-eval "$CMD $SCRIPT_DIR/run.js"
+eval "$CMD $SCRIPT_DIR/run.js $ONLY_OPTION"

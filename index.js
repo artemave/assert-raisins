@@ -78,6 +78,7 @@ test.only = function(name, fn) {
 
 module.exports = {
   test,
+  it: test,
 
   afterSuite(fn) {
     afterSuiteCallbacks.push(fn)
@@ -95,20 +96,27 @@ module.exports = {
     getCurrentSuite().afterAll.push(fn)
   },
 
-  async run() {
+  async run({only = undefined} = {}) {
     const parentModule = getParentModule()
 
     if (!parentModule.parent) {
       await Promise.all(beforeSuiteCallbacks.map(fn => fn()))
 
       for (const headline in suites) {
+        const suite = suites[headline]
+
+        const tests = only ? suite.tests.filter(test => test.name === only) : suite.tests
+        if (!tests.length) {
+          continue
+        }
+
         rgb.cyan(headline + ' ')
 
-        await Promise.all(suites[headline].beforeAll.map(fn => fn()))
+        await Promise.all(suite.beforeAll.map(fn => fn()))
 
-        const [success, failure] = await runTests(suites[headline].tests)
+        const [success, failure] = await runTests(tests)
 
-        await Promise.all(suites[headline].afterAll.map(fn => fn()))
+        await Promise.all(suite.afterAll.map(fn => fn()))
 
         if (failure) {
           rgb.redln(`✗ ${success}/${failure}`)

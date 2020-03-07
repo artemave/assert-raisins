@@ -1,5 +1,5 @@
 (async () => {
-  const {test, run, beforeAll, beforeEach, beforeSuite} = require('..')
+  const {test, run, beforeFile, beforeEach, beforeSuite} = require('..')
   const assert = require('assert')
 
   let invoke = 0
@@ -7,7 +7,7 @@
   let afterEachInvoke = 0
   let beforeSuiteInvoke = 0
   let afterSuiteInvoke = 0
-  let beforeAllInvoke = 0
+  let beforeFileInvoke = 0
   let afterAllInvoke = 0
 
   beforeSuite(cleanup => {
@@ -17,12 +17,12 @@
   })
   beforeSuite(async () => Promise.resolve(beforeSuiteInvoke++))
 
-  beforeAll(cleanup => {
-    beforeAllInvoke++
+  beforeFile(cleanup => {
+    beforeFileInvoke++
     cleanup(() => afterAllInvoke++)
     cleanup(async () => afterAllInvoke++)
   })
-  beforeAll(async () => Promise.resolve(beforeAllInvoke++))
+  beforeFile(async () => Promise.resolve(beforeFileInvoke++))
 
   beforeEach(cleanup => {
     beforeEachInvoke++
@@ -39,7 +39,7 @@
   assert.equal(invoke, 2)
   assert.equal(beforeSuiteInvoke, 2)
   assert.equal(afterSuiteInvoke, 2)
-  assert.equal(beforeAllInvoke, 2)
+  assert.equal(beforeFileInvoke, 2)
   assert.equal(afterAllInvoke, 2)
   assert.equal(beforeEachInvoke, 4)
   assert.equal(afterEachInvoke, 4)

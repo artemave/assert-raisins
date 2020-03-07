@@ -68,7 +68,7 @@ function getCurrentSuite() {
 
   if (!suites[headline]) {
     suites[headline] = {
-      beforeAll: [],
+      beforeFile: [],
       beforeEach: [],
       tests: []
     }
@@ -100,8 +100,8 @@ module.exports = {
     getCurrentSuite().beforeEach.push(fn)
   },
 
-  beforeAll(fn) {
-    getCurrentSuite().beforeAll.push(fn)
+  beforeFile(fn) {
+    getCurrentSuite().beforeFile.push(fn)
   },
 
   async run({only = undefined} = {}) {
@@ -125,7 +125,7 @@ module.exports = {
           afterAll.push(fn)
         }
 
-        await Promise.all(suite.beforeAll.map(fn => fn(registerAfterAllCleanup)))
+        await Promise.all(suite.beforeFile.map(fn => fn(registerAfterAllCleanup)))
         const [success, failure] = await runTests({tests, beforeEach: suite.beforeEach})
         await Promise.all(afterAll.map(fn => fn()))
 

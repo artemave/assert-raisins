@@ -29,7 +29,15 @@ Run all tests:
 
     ./node_modules/.bin/donc test/**/*Test.js
 
-Other things available: `test.only()`, `beforeEach()`, `beforeAll()` and `beforeSuite()`. Each hook callback is passed a cleanup function:
+Other things available:
+
+- `it` which is an alias for `test`
+- `test.only()` to run single test (also available as a command line argument: `--only='some test'`)
+- `beforeEach()` to run some code before each test in a file
+- `beforeFile()` to run some code before all tests in a file
+- `beforeSuite()` to run some code before all tests
+
+Each hook callback is passed a cleanup function:
 
 ```javascript
 beforeEach(async (clenaup) => {
@@ -40,9 +48,3 @@ beforeEach(async (clenaup) => {
   clenaup(async () => await server.stop())
 })
 ```
-
-`only` can also be passed from the command line:
-
-    ./node_modules/.bin/donc --only='firstTest 1' test/**/*.Test.js
-
-There is also `it` which is an alias for `test`.

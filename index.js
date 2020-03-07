@@ -18,16 +18,28 @@ function getParentModuleName() {
   return path
 }
 
+function registerAfterSuiteCleanup(fn) {
+  afterSuiteCallbacks.push(fn)
+}
+
 function getParentModule() {
   return require.cache[getParentModuleName()]
 }
 
-async function runTests(tests) {
+async function runTests({tests, beforeEach}) {
   let [success, failure] = [0, 0]
 
   for (const test of tests) {
     try {
+      const afterEach = []
+      const registerAfterEachCleanup = fn => {
+        afterEach.push(fn)
+      }
+
+      await Promise.all(beforeEach.map(fn => fn(registerAfterEachCleanup)))
       await test.fn()
+      await Promise.all(afterEach.map(fn => fn()))
+
       rgb.gray('•')
       success++
 
@@ -57,7 +69,7 @@ function getCurrentSuite() {
   if (!suites[headline]) {
     suites[headline] = {
       beforeAll: [],
-      afterAll: [],
+      beforeEach: [],
       tests: []
     }
   }
@@ -80,27 +92,23 @@ module.exports = {
   test,
   it: test,
 
-  afterSuite(fn) {
-    afterSuiteCallbacks.push(fn)
-  },
-
   beforeSuite(fn) {
     beforeSuiteCallbacks.push(fn)
+  },
+
+  beforeEach(fn) {
+    getCurrentSuite().beforeEach.push(fn)
   },
 
   beforeAll(fn) {
     getCurrentSuite().beforeAll.push(fn)
   },
 
-  afterAll(fn) {
-    getCurrentSuite().afterAll.push(fn)
-  },
-
   async run({only = undefined} = {}) {
     const parentModule = getParentModule()
 
     if (!parentModule.parent) {
-      await Promise.all(beforeSuiteCallbacks.map(fn => fn()))
+      await Promise.all(beforeSuiteCallbacks.map(fn => fn(registerAfterSuiteCleanup)))
 
       for (const headline in suites) {
         const suite = suites[headline]
@@ -112,11 +120,14 @@ module.exports = {
 
         rgb.cyan(headline + ' ')
 
-        await Promise.all(suite.beforeAll.map(fn => fn()))
+        const afterAll = []
+        const registerAfterAllCleanup = fn => {
+          afterAll.push(fn)
+        }
 
-        const [success, failure] = await runTests(tests)
-
-        await Promise.all(suite.afterAll.map(fn => fn()))
+        await Promise.all(suite.beforeAll.map(fn => fn(registerAfterAllCleanup)))
+        const [success, failure] = await runTests({tests, beforeEach: suite.beforeEach})
+        await Promise.all(afterAll.map(fn => fn()))
 
         if (failure) {
           rgb.redln(`✗ ${success}/${failure}`)

@@ -29,8 +29,20 @@ Run all tests:
 
     ./node_modules/.bin/donc test/**/*Test.js
 
-Other things available: `test.only()`, `beforeAll()`, `afterAll()`, `beforeSuite()` and `afterSuite()`. There is also `it` which is an alias for `test`.
+Other things available: `test.only()`, `beforeEach()`, `beforeAll()` and `beforeSuite()`. Each hook callback is passed a cleanup function:
+
+```javascript
+beforeEach(async (clenaup) => {
+  const server = new Server()
+  await server.start()
+
+  // can be invoked multiple times
+  clenaup(async () => await server.stop())
+})
+```
 
 `only` can also be passed from the command line:
 
     ./node_modules/.bin/donc --only='firstTest 1' test/**/*.Test.js
+
+There is also `it` which is an alias for `test`.

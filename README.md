@@ -10,6 +10,9 @@ Install:
 
     npm i --save-dev donc
 
+
+> On OSX, you might need to `brew install bash` (donc relies on `globstar`, but the ancient version of Bash OSX ships with, does not have it)
+
 Write a test `test/firstTest.js`:
 
 ```javascript

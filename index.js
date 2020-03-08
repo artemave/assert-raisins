@@ -1,4 +1,4 @@
-const rgb = require('barecolor')
+const colors = require('./colors')
 let suites = []
 let isOnly = false
 let afterSuiteCallbacks = []
@@ -40,11 +40,11 @@ async function runTests({tests, beforeEach}) {
       await test.fn()
       await Promise.all(afterEach.map(fn => fn()))
 
-      rgb.gray('•')
+      colors.gray('•')
       success++
 
     } catch(e) {
-      rgb.red(`\n\n✗ ${test.name} \n\n`)
+      colors.red(`\n\n✗ ${test.name} \n\n`)
       prettyError(e)
       failure++
     }
@@ -55,11 +55,11 @@ async function runTests({tests, beforeEach}) {
 
 function prettyError(e) {
   const msg = e.stack
-  if (!msg) return rgb.yellow(e)
+  if (!msg) return colors.yellow(e)
 
   const i = msg.indexOf('\n')
-  rgb.yellowln(msg.slice(0, i))
-  rgb.gray(msg.slice(i))
+  colors.yellowln(msg.slice(0, i))
+  colors.gray(msg.slice(i))
   console.info('\n')
 }
 
@@ -118,7 +118,7 @@ module.exports = {
           continue
         }
 
-        rgb.cyan(headline + ' ')
+        colors.cyan(headline + ' ')
 
         const afterAll = []
         const registerAfterAllCleanup = fn => {
@@ -130,9 +130,9 @@ module.exports = {
         await Promise.all(afterAll.map(fn => fn()))
 
         if (failure) {
-          rgb.redln(`✗ ${success}/${failure}`)
+          colors.redln(`✗ ${success}/${failure}`)
         } else {
-          rgb.greenln(` ✓ ${success}/0`)
+          colors.greenln(` ✓ ${success}/0`)
         }
       }
 

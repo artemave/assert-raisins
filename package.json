@@ -1,6 +1,6 @@
 {
   "name": "donc",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Minimalistic test runner that does NOT dynamically require test files. And so `donc --inspect-brk` will have all project files loaded.",
   "main": "index.js",
   "bin": "bin/donc",

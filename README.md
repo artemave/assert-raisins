@@ -4,6 +4,8 @@ A minimalistic test runner for Node.
 
 Motivation: avoid dynamicly requiring test files. Why? So that `donc --inspect-brk` has your project loaded on the first break point.
 
+Inspired by [baretest](https://github.com/volument/baretest)
+
 ## Usage
 
 Install:

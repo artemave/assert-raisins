@@ -2,9 +2,11 @@
 
 A minimalistic test runner for Node.
 
-Motivation: avoid dynamicly requiring test files. Why? So that `donc --inspect-brk` has your project loaded on the first break point.
+## Motivation
 
-Inspired by [baretest](https://github.com/volument/baretest)
+Just about any Node test runner I've ever used loads test files from within a Node process. That's fine, but when you want to use Node debugger and you run tests with `--inspect-brk` the initial breakpoint stops before test files get required. As a result, none of your project code is present in the sources tab and it's impossible to add meaningful breakpoints.
+
+Donc addresses that one thing. When run with `--inspect-brk`, all tests are already loaded before the initial breakpoint.
 
 ## Usage
 

@@ -1,6 +1,6 @@
 # Donc
 
-Minimalistic, zero dependency test runner for Node.
+Minimalistic, debugger friendly test runner for Node.
 
 ## Motivation
 

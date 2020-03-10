@@ -1,4 +1,4 @@
-# Donc
+# Donc [![Codeship Status for artemave/donc](https://app.codeship.com/projects/26cc3310-4549-0138-6faa-623c142c33e2/status?branch=master)](https://app.codeship.com/projects/388462)
 
 Minimalistic, debugger friendly test runner for Node.
 

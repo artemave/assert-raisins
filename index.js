@@ -108,6 +108,8 @@ module.exports = {
     const parentModule = getParentModule()
 
     if (!parentModule.parent) {
+      let pass = true
+
       await Promise.all(beforeSuiteCallbacks.map(fn => fn(registerAfterSuiteCleanup)))
 
       for (const headline in suites) {
@@ -130,6 +132,7 @@ module.exports = {
         await Promise.all(afterAll.map(fn => fn()))
 
         if (failure) {
+          pass = false
           colors.redln(`✗ ${success}/${failure}`)
         } else {
           colors.greenln(` ✓ ${success}/0`)
@@ -137,6 +140,8 @@ module.exports = {
       }
 
       await Promise.all(afterSuiteCallbacks.map(fn => fn()))
+
+      return pass
     }
   }
 }

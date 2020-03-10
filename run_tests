@@ -1,7 +1,40 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
+shopt -s globstar
 IFS=$'\n\t'
 
 for FILE in test/*Test.js; do
   node $FILE
 done
+
+rm -rf ./test/results
+mkdir -p ./test/results
+
+# it runs test files
+./bin/donc test/cli/**/*Test.js
+tests_run="$(ls test/results | wc -l)"
+if [ $tests_run -ne 2 ]; then
+  echo 'Fail!'
+  exit 1
+fi
+
+rm -rf ./test/results
+mkdir -p ./test/results
+
+# it expands globstar in node
+# also adding random node flag
+./bin/donc --no-deprecation 'test/cli/**/*Test.js'
+tests_run="$(ls test/results | wc -l)"
+if [ $tests_run -ne 2 ]; then
+  echo 'Fail!'
+  exit 1
+fi
+
+# it exits 1 on failure
+set +e
+./bin/donc test/error/failTest.js
+if [ $? -ne 1 ]; then
+  echo 'Fail!'
+  exit 1
+fi

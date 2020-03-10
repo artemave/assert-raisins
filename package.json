@@ -11,7 +11,7 @@
     "test": "./run_tests"
   },
   "dependencies": {
-    "barecolor": "^1.0.1"
+    "glob": "^7.1.6"
   },
   "devDependencies": {}
 }

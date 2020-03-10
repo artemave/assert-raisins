@@ -1,4 +1,4 @@
-const {run} = require('..')
+const {run} = require('.')
 
 !(async () => {
   const args = process.argv.reduce((result, arg) => {
@@ -9,5 +9,6 @@ const {run} = require('..')
     return result
   }, {})
 
-  await run(args)
+  const success = await run(args)
+  process.exit(success ? 0 : 1)
 })()

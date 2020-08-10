@@ -2,11 +2,13 @@
 
 Minimalistic, debugger friendly test runner for Node.
 
-## Motivation
+## Features
 
-Just about any Node test runner I've ever used loads test files from within a Node process. That's fine, but when you want to use Node debugger and you run tests with `--inspect-brk` the initial breakpoint stops before test files get required. As a result, none of your project code is present in the sources tab and it's impossible to add meaningful breakpoints.
-
-Donc addresses that one thing. When run with `--inspect-brk`, all tests are already loaded before the initial breakpoint.
+- fast
+- runs test for a line number (failing tests can be rerun from copying a line in a stacktrace)
+- loads test files before initial `--inspect-brk` breakpoint (as alternative to inserting `debugger` everywhere)
+- no nesting e.g. `describe`/`context` (may be considered as a flaw by some, but it's an experiment)
+- no separate `after*` callbacks (instead each `before*` can register cleanup)
 
 ## Usage
 

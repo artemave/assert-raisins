@@ -4,6 +4,7 @@ set -euo pipefail
 shopt -s globstar
 IFS=$'\n\t'
 
+echo test files can be run on its own
 for FILE in test/*Test.js; do
   node $FILE
 done
@@ -11,10 +12,10 @@ done
 rm -rf ./test/results
 mkdir -p ./test/results
 
-# it runs test files
+echo 'test files can be run using `donc` cli'
 ./bin/donc test/cli/**/*Test.js
 tests_run="$(ls test/results | wc -l)"
-if [ $tests_run -ne 2 ]; then
+if [ $tests_run -ne 3 ]; then
   echo 'Fail!'
   exit 1
 fi
@@ -22,16 +23,38 @@ fi
 rm -rf ./test/results
 mkdir -p ./test/results
 
-# it expands globstar in node
-# also adding random node flag
-./bin/donc --no-deprecation 'test/cli/**/*Test.js'
+echo --only option
+./bin/donc --only='also works' test/cli/**/*Test.js
 tests_run="$(ls test/results | wc -l)"
-if [ $tests_run -ne 2 ]; then
+if [ $tests_run -ne 1 ]; then
   echo 'Fail!'
   exit 1
 fi
 
-# it exits 1 on failure
+rm -rf ./test/results
+mkdir -p ./test/results
+
+echo line number
+./bin/donc test/cli/one/otherTest.js:9
+tests_run="$(ls test/results | wc -l)"
+if [ $tests_run -ne 1 ]; then
+  echo 'Fail!'
+  exit 1
+fi
+
+rm -rf ./test/results
+mkdir -p ./test/results
+
+echo it expands globstar in node
+# also adding random node flag
+./bin/donc --no-deprecation 'test/cli/**/*Test.js'
+tests_run="$(ls test/results | wc -l)"
+if [ $tests_run -ne 3 ]; then
+  echo 'Fail!'
+  exit 1
+fi
+
+echo it exits 1 on failure
 set +e
 ./bin/donc test/error/failTest.js
 if [ $? -ne 1 ]; then

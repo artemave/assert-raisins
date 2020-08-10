@@ -34,6 +34,13 @@ Run all tests:
 
     ./node_modules/.bin/donc test/**/*Test.js
 
+Run individual test:
+
+    # by line number
+    ./node_modules/.bin/donc test/someTest.js:123
+    # or using --only option
+    ./node_modules/.bin/donc --only='when bananas' test/someTest.js
+
 Other things available:
 
 - `it` which is an alias for `test`

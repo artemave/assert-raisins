@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 const glob = require('glob')
+const fs = require('fs')
 const {spawn} = require('child_process')
 const path = require('path')
+const getEnclosingTestName = require('../getEnclosingTestName')
 
 function isDoncArg(arg) {
   return arg.match(/--only=/)
@@ -18,14 +20,23 @@ for (const arg of process.argv.slice(2)) {
   } else if (skip_require_next_file) {
     node_args.push(arg)
   } else {
-    const files = glob.sync(arg)
+    const pathWithLineNumberMatch = arg.match(/(.*):(\d+)$/)
+    if (pathWithLineNumberMatch) {
+      const fileContents = fs.readFileSync(`./${pathWithLineNumberMatch[1]}`, { encoding: 'utf-8' })
+      const testName = getEnclosingTestName(fileContents, pathWithLineNumberMatch[2])
 
-    if (files.length) {
-      for (const file of files) {
-        node_args.push('-r', `./${file}`)
-      }
+      donc_args.push(`--only=${testName}`)
+      node_args.push('-r', `./${pathWithLineNumberMatch[1]}`)
     } else {
-      node_args.push(arg)
+      const files = glob.sync(arg)
+
+      if (files.length) {
+        for (const file of files) {
+          node_args.push('-r', `./${file}`)
+        }
+      } else {
+        node_args.push(arg)
+      }
     }
   }
 
@@ -35,9 +46,7 @@ for (const arg of process.argv.slice(2)) {
 node_args.push(path.join(__dirname, '../runner.js'))
 node_args.push(...donc_args)
 
-const proc = spawn(process.execPath, node_args, {
-  stdio: 'inherit'
-})
+const proc = spawn(process.execPath, node_args, { stdio: 'inherit' })
 
 proc.on('exit', (code, signal) => {
   process.on('exit', () => {

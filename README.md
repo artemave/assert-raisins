@@ -5,7 +5,7 @@ Minimalistic, debugger friendly test runner for Node.
 ## Features
 
 - fast
-- runs test for a line number (failing tests can be rerun from copying a line from a stacktrace)
+- runs test for a line number (failing tests can be rerun by copying a line from a stacktrace)
 - loads test files before initial `--inspect-brk` breakpoint (breakpoints can be set when the debugger pops up, as an alternative to inserting `debugger` everywhere)
 - no nesting e.g. `describe`/`context` (nesting often spirals out of control making test setup difficult to follow)
 - no separate `after*` callbacks (instead each `before*` can register cleanup)

@@ -23,11 +23,11 @@ Write a test `test/firstTest.js`:
 const {test} = require('donc')
 const assert = require('assert')
 
-test('firstTest 1', () => {
+test('first passing test', () => {
   assert.ok(true)
 })
 
-test('firstTest 2', async () => {
+test('first failing test', async () => {
   assert.equal(1, 2)
 })
 ```

@@ -78,14 +78,18 @@ function getCurrentSuite() {
 
 function test(name, fn) {
   if (isOnly) {
-    suites = []
+    return
   }
   getCurrentSuite().tests.push({name, fn})
 }
 
 test.only = function(name, fn) {
-  isOnly = true
+  if (isOnly) {
+    return
+  }
+  suites = []
   test(name, fn)
+  isOnly = true
 }
 
 module.exports = {

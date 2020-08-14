@@ -1,22 +1,29 @@
-const glob = require('glob')
+const realGlob = require('glob')
 const fs = require('fs')
-const path = require('path')
 const getEnclosingTestName = require('./getEnclosingTestName')
 
 function isDoncArg(arg) {
   return arg.match(/--only=/)
 }
 
-module.exports = function parseArgv(argv) {
-  const child_args = []
+function isNodeArg(arg) {
+  return !isDoncArg(arg) && arg.match(/^-/)
+}
+
+function lastArgIsRequire(args) {
+  return ['-r', '--require'].includes(args.slice().pop())
+}
+
+module.exports = function parseArgv(argv, glob = realGlob) {
+  const node_args = []
   const donc_args = []
-  let skip_require_next_file = false
+  const file_args = []
 
   for (const arg of argv) {
     if (isDoncArg(arg)) {
       donc_args.push(arg)
-    } else if (skip_require_next_file) {
-      child_args.push(arg)
+    } else if (isNodeArg(arg) || lastArgIsRequire(node_args)) {
+      node_args.push(arg)
     } else {
       const pathWithLineNumberMatch = arg.match(/(.*):(\d+)$/)
       if (pathWithLineNumberMatch) {
@@ -24,25 +31,32 @@ module.exports = function parseArgv(argv) {
         const testName = getEnclosingTestName(fileContents, pathWithLineNumberMatch[2])
 
         donc_args.push(`--only=${testName}`)
-        child_args.push('-r', `./${pathWithLineNumberMatch[1]}`)
+        file_args.push('-r', `./${pathWithLineNumberMatch[1]}`)
       } else {
         const files = glob.sync(arg)
 
         if (files.length) {
           for (const file of files) {
-            child_args.push('-r', `./${file}`)
+            file_args.push('-r', `./${file}`)
           }
         } else {
-          child_args.push(arg)
+          throw new Error(`No test files found in '${arg}'.`)
         }
       }
     }
-
-    skip_require_next_file = arg === '-r'
   }
 
-  child_args.push(path.join(__dirname, 'runner.js'))
-  child_args.push(...donc_args)
+  if (!file_args.length) {
+    const files = glob.sync('test/**/*{Spec,Test}.{j,t}s')
 
-  return child_args
+    for (const file of files) {
+      file_args.push('-r', `./${file}`)
+    }
+  }
+
+  return {
+    file_args,
+    node_args,
+    donc_args
+  }
 }

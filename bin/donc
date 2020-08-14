@@ -1,9 +1,23 @@
 #!/usr/bin/env node
 
 const {spawn} = require('child_process')
+const path = require('path')
 const parseArgv = require('../parseArgv')
 
-const child_args = parseArgv(process.argv.slice(2))
+const {node_args, file_args, donc_args} = parseArgv(process.argv.slice(2))
+
+if (!file_args.length) {
+  console.error('No test files given/found.')
+  process.exit(1)
+}
+
+const child_args = [
+  ...node_args,
+  ...file_args,
+  path.join(__dirname, '..', 'runner.js'),
+  ...donc_args
+]
+
 const proc = spawn(process.execPath, child_args, { stdio: 'inherit' })
 
 proc.on('exit', (code, signal) => {

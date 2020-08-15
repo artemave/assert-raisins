@@ -9,6 +9,15 @@
 
   const {node_args, file_args, donc_args} = parseArgv(process.argv.slice(2))
 
+  if (['--help', '-h'].some(o => node_args.includes(o))) {
+    console.info('Usage: donc [node options] [donc options] [files]')
+    console.info('')
+    console.info('Options:')
+    console.info(' --only="bananas"                         only run test named "bananas"')
+    console.info(" --skip-debug-url-copy-to-clipboard       don't copy debug url to clipboard (when run with --inspect-brk)")
+    process.exit()
+  }
+
   if (!file_args.length) {
     console.error('No test files given/found.')
     process.exit(1)

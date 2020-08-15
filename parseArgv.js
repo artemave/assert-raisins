@@ -3,7 +3,7 @@ const fs = require('fs')
 const getEnclosingTestName = require('./getEnclosingTestName')
 
 function isDoncArg(arg) {
-  return arg.match(/--only=/)
+  return arg.match(/--only=|--skip-debug-url-copy-to-clipboard/)
 }
 
 function isNodeArg(arg) {

@@ -1,36 +1,53 @@
 #!/usr/bin/env node
 
-const {spawn} = require('child_process')
-const path = require('path')
-const parseArgv = require('../parseArgv')
+(async () => {
+  const {spawn} = require('child_process')
+  const path = require('path')
+  const clipboardy = require('clipboardy')
+  const parseArgv = require('../parseArgv')
+  const retry = require('../retry')
 
-const {node_args, file_args, donc_args} = parseArgv(process.argv.slice(2))
+  const {node_args, file_args, donc_args} = parseArgv(process.argv.slice(2))
 
-if (!file_args.length) {
-  console.error('No test files given/found.')
-  process.exit(1)
-}
+  if (!file_args.length) {
+    console.error('No test files given/found.')
+    process.exit(1)
+  }
 
-const child_args = [
-  ...node_args,
-  ...file_args,
-  path.join(__dirname, '..', 'runner.js'),
-  ...donc_args
-]
+  const child_args = [
+    ...node_args,
+    ...file_args,
+    path.join(__dirname, '..', 'runner.js'),
+    ...donc_args
+  ]
 
-const proc = spawn(process.execPath, child_args, { stdio: 'inherit' })
+  const proc = spawn(process.execPath, child_args, { stdio: 'inherit' })
 
-proc.on('exit', (code, signal) => {
-  process.on('exit', () => {
-    if (signal) {
-      process.kill(process.pid, signal)
-    } else {
-      process.exit(code)
-    }
+  proc.on('exit', (code, signal) => {
+    process.on('exit', () => {
+      if (signal) {
+        process.kill(process.pid, signal)
+      } else {
+        process.exit(code)
+      }
+    })
   })
-})
 
-process.on('SIGINT', () => {
-  proc.kill('SIGINT')
-  proc.kill('SIGTERM') // if that didn't work, we're probably in an infinite loop, so make it die.
+  if (child_args.includes('--inspect-brk') && !donc_args.includes('--skip-debug-url-copy-to-clipboard')) {
+    await retry(async () => {
+      const [inspectorInfo] = await getJson('http://localhost:9229/json/list')
+      const debuggerUrl = inspectorInfo.devtoolsFrontendUrl.replace(/^chrome-/, '')
+
+      await clipboardy.write(debuggerUrl)
+      console.info(`Debug url copied to clipboard: ${debuggerUrl}`)
+    })
+  }
+
+  process.on('SIGINT', () => {
+    proc.kill('SIGINT')
+    proc.kill('SIGTERM') // if that didn't work, we're probably in an infinite loop, so make it die.
+  })
+})().catch((e) => {
+  console.error(e)
+  process.exit(1)
 })

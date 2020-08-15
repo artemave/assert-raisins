@@ -11,6 +11,7 @@
     "test": "./run_tests"
   },
   "dependencies": {
+    "clipboardy": "^2.3.0",
     "glob": "^7.1.6"
   },
   "devDependencies": {}

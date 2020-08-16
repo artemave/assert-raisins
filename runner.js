@@ -2,7 +2,9 @@ const {run} = require('.')
 
 !(async () => {
   const args = process.argv.reduce((result, arg) => {
-    let [key, value] = arg.split('=')
+    let [key, ...rest] = arg.split('=')
+    const value = rest.join('=')
+
     key = key.replace('--', '')
     result[key] = value
 

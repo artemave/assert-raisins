@@ -1,6 +1,6 @@
 (async () => {
   const {it, run} = require('..')
-  const parseArgv = require('../parseArgv')
+  const parseArgv = require('../lib/parseArgv')
   const assert = require('assert')
 
   class FakeGlob {

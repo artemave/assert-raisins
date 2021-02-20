@@ -4,8 +4,8 @@
   const {spawn} = require('child_process')
   const path = require('path')
   const clipboardy = require('clipboardy')
-  const parseArgv = require('../parseArgv')
-  const retry = require('../retry')
+  const parseArgv = require('../lib/parseArgv')
+  const retry = require('../lib/retry')
 
   const {node_args, file_args, donc_args} = parseArgv(process.argv.slice(2))
 
@@ -26,7 +26,7 @@
   const child_args = [
     ...node_args,
     ...file_args,
-    path.join(__dirname, '..', 'runner.js'),
+    path.join(__dirname, '..', 'lib', 'runner.js'),
     ...donc_args
   ]
 

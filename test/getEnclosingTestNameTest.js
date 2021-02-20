@@ -1,6 +1,6 @@
 (async () => {
   const {it, run} = require('..')
-  const getEnclosingTestName = require('../getEnclosingTestName')
+  const getEnclosingTestName = require('../lib/getEnclosingTestName')
   const assert = require('assert')
 
   it('finds closest test/it invokation to the line number', function() {

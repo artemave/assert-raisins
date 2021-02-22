@@ -6,6 +6,7 @@
   const clipboardy = require('clipboardy')
   const parseArgv = require('../lib/parseArgv')
   const retry = require('../lib/retry')
+  const getJson = require('../lib/getJson')
 
   const {node_args, file_args, donc_args} = parseArgv(process.argv.slice(2))
 

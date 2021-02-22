@@ -5,14 +5,16 @@ shopt -s globstar
 IFS=$'\n\t'
 
 echo test files can be run on its own
-for FILE in test/*Test.js; do
-  node $FILE
+for FILE in test/isolated/*Test.ts; do
+  node -r ts-node/register $FILE
 done
 
 rm -rf ./test/results
 mkdir -p ./test/results
 
 echo 'test files can be run using `donc` cli'
+./bin/donc -r ts-node/register test/*Test.ts
+
 ./bin/donc test/cli/**/*Test.js
 tests_run="$(ls test/results | wc -l)"
 if [ $tests_run -ne 3 ]; then

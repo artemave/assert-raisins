@@ -1,7 +1,7 @@
-(async () => {
-  const {test, run} = require('..')
-  const assert = require('assert')
+import {test, run} from '../..'
+import assert from 'assert'
 
+(async () => {
   let invoke = 0
   let testName
 
@@ -13,8 +13,4 @@
 
   assert.equal(invoke, 1)
   assert.equal(testName, 'test1')
-
-})().catch((e) => {
-  console.error(e)
-  process.exit(1)
-})
+})()

@@ -9,6 +9,7 @@ Minimalistic, debugger friendly test runner for Node.
 - inspector friendly (copies debug url to clipboard; loads test files before initial `--inspect-brk` breakpoint)
 - no nesting (nested `describe`/`context`s spread test setup all over the test file, making it difficult to follow)
 - no separate `after*` callbacks (instead each `before*` can register cleanup)
+- includes typescript type declarations
 
 ## Usage
 

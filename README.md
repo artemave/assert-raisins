@@ -56,11 +56,11 @@ Other things available:
 Each hook callback is passed a cleanup function:
 
 ```javascript
-beforeEach(async (clenaup) => {
+beforeEach(async (cleanup) => {
   const server = new Server()
   await server.start()
 
   // can be invoked multiple times
-  clenaup(async () => await server.stop())
+  cleanup(async () => await server.stop())
 })
 ```

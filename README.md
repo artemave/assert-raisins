@@ -1,4 +1,4 @@
-# Donc [![Codeship Status for artemave/donc](https://app.codeship.com/projects/3127301f-c33a-4a4d-a68a-c2c0659bdfef/status?branch=master)](https://app.codeship.com/projects/430410)
+# Assert-raisins [![Codeship Status for artemave/assert-raisins](https://app.codeship.com/projects/3127301f-c33a-4a4d-a68a-c2c0659bdfef/status?branch=master)](https://app.codeship.com/projects/430410)
 
 Minimalistic, debugger friendly test runner for Node.
 
@@ -15,13 +15,13 @@ Minimalistic, debugger friendly test runner for Node.
 
 Install:
 
-    npm i --save-dev donc
+    npm i --save-dev assert-raisins
 
 
 Write a test `test/firstTest.js`:
 
 ```javascript
-const {test} = require('donc')
+const {test} = require('assert-raisins')
 const assert = require('assert')
 
 test('first passing test', () => {
@@ -35,15 +35,15 @@ test('first failing test', async () => {
 
 Run all tests:
 
-    ./node_modules/.bin/donc test/**/*Test.js
+    ./node_modules/.bin/ars test/**/*Test.js
 
 Run individual test:
 
     # by line number
-    ./node_modules/.bin/donc test/someTest.js:123
+    ./node_modules/.bin/ars test/someTest.js:123
     
     # or using --only option
-    ./node_modules/.bin/donc --only='when bananas' test/someTest.js
+    ./node_modules/.bin/ars --only='when bananas' test/someTest.js
 
 Other things available:
 

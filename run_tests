@@ -12,10 +12,10 @@ done
 rm -rf ./test/results
 mkdir -p ./test/results
 
-echo 'test files can be run using `donc` cli'
-./bin/donc -r ts-node/register test/*Test.ts
+echo 'test files can be run using `ars` cli'
+./bin/ars -r ts-node/register test/*Test.ts
 
-./bin/donc test/cli/**/*Test.js
+./bin/ars test/cli/**/*Test.js
 tests_run="$(ls test/results | wc -l)"
 if [ $tests_run -ne 3 ]; then
   echo 'Fail!'
@@ -26,7 +26,7 @@ rm -rf ./test/results
 mkdir -p ./test/results
 
 echo --only option
-./bin/donc --only='also works' test/cli/**/*Test.js
+./bin/ars --only='also works' test/cli/**/*Test.js
 tests_run="$(ls test/results | wc -l)"
 if [ $tests_run -ne 1 ]; then
   echo 'Fail!'
@@ -37,7 +37,7 @@ rm -rf ./test/results
 mkdir -p ./test/results
 
 echo line number
-./bin/donc test/cli/one/otherTest.js:9
+./bin/ars test/cli/one/otherTest.js:9
 tests_run="$(ls test/results | wc -l)"
 if [ $tests_run -ne 1 ]; then
   echo 'Fail!'
@@ -49,7 +49,7 @@ mkdir -p ./test/results
 
 echo it expands globstar in node
 # also adding random node flag
-./bin/donc --no-deprecation 'test/cli/**/*Test.js'
+./bin/ars --no-deprecation 'test/cli/**/*Test.js'
 tests_run="$(ls test/results | wc -l)"
 if [ $tests_run -ne 3 ]; then
   echo 'Fail!'
@@ -58,7 +58,7 @@ fi
 
 echo it exits 1 on failure
 set +e
-./bin/donc test/error/failTest.js
+./bin/ars test/error/failTest.js
 if [ $? -ne 1 ]; then
   echo 'Fail!'
   exit 1

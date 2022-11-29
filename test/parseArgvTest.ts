@@ -17,7 +17,7 @@ it('returns files to require', function() {
   assert.deepEqual(args, {
     file_args: ['-r', './file1', '-r', './file2'],
     node_args: [],
-    donc_args: []
+    ars_args: []
   })
 })
 
@@ -28,7 +28,7 @@ it('assumes test files are in test/ if no path given', function() {
   assert.deepEqual(args, {
     file_args: ['-r', './file1', '-r', './file2'],
     node_args: ['--stuff'],
-    donc_args: []
+    ars_args: []
   })
 })
 
@@ -38,14 +38,14 @@ it('throws if bad path given', function() {
   }, /No test files found in 'blablah\/stuff'./)
 })
 
-it('knows donc args', function() {
+it('knows ars args', function() {
   const args = parseArgv(['--stuff', '--only=bananas'], new FakeGlob({
     'test/**/*{Spec,Test}.{j,t}s': ['file1', 'file2']
   }))
   assert.deepEqual(args, {
     file_args: ['-r', './file1', '-r', './file2'],
     node_args: ['--stuff'],
-    donc_args: ['--only=bananas']
+    ars_args: ['--only=bananas']
   })
 })
 

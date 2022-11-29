@@ -1,12 +1,12 @@
 {
-  "name": "donc",
+  "name": "assert-raisins",
   "version": "1.4.0",
-  "description": "Minimalistic test runner that does NOT dynamically require test files. And so `donc --inspect-brk` will have all project files loaded.",
+  "description": "Minimalistic test runner that does NOT dynamically require test files. And so `ars --inspect-brk` will have all project files loaded.",
   "main": "index.js",
-  "bin": "bin/donc",
+  "bin": "bin/ars",
   "author": "github.com/artemave",
   "license": "MIT",
-  "repository": "github:artemave/donc",
+  "repository": "github:artemave/assert-raisins",
   "scripts": {
     "test": "./run_tests"
   },

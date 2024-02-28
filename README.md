@@ -41,7 +41,7 @@ Run individual test:
 
     # by line number
     ./node_modules/.bin/ars test/someTest.js:123
-    
+
     # or using --only option
     ./node_modules/.bin/ars --only='when bananas' test/someTest.js
 

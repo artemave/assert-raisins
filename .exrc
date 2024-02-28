@@ -1,8 +1,8 @@
-let g:vigun_commands = [
+let g:vigun_mappings = [
       \ {
       \   'pattern': 'test/.*Test.ts$',
-      \   'normal': 'node -r ts-node/register',
-      \   'current': 'line_number',
-      \   'debug': 'node -r ts-node/register --inspect-brk',
+      \   'all': './bin/ars -r ts-node/register #{file}',
+      \   'nearest': './bin/ars -r ts-node/register #{file}:#{line}',
+      \   'debug-nearest': './bin/ars -r ts-node/register --inspect-brk #{file}:#{line}',
       \ },
       \]

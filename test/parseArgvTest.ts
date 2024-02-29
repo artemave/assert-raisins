@@ -1,5 +1,5 @@
-import {it, run} from '..'
-import parseArgv from '../lib/parseArgv'
+import {it, run} from '../index.js'
+import parseArgv from '../lib/parseArgv.js'
 import assert from 'assert'
 
 class FakeGlob {
@@ -15,7 +15,7 @@ it('returns files to require', function() {
     'test/*Test.js': ['file1', 'file2']
   }))
   assert.deepEqual(args, {
-    file_args: ['-r', './file1', '-r', './file2'],
+    file_args: ['--import=./file1', '--import=./file2'],
     node_args: [],
     ars_args: []
   })
@@ -26,7 +26,7 @@ it('assumes test files are in test/ if no path given', function() {
     'test/**/*{Spec,Test}.{j,t}s': ['file1', 'file2']
   }))
   assert.deepEqual(args, {
-    file_args: ['-r', './file1', '-r', './file2'],
+    file_args: ['--import=./file1', '--import=./file2'],
     node_args: ['--stuff'],
     ars_args: []
   })
@@ -43,7 +43,7 @@ it('knows ars args', function() {
     'test/**/*{Spec,Test}.{j,t}s': ['file1', 'file2']
   }))
   assert.deepEqual(args, {
-    file_args: ['-r', './file1', '-r', './file2'],
+    file_args: ['--import=./file1', '--import=./file2'],
     node_args: ['--stuff'],
     ars_args: ['--only=bananas']
   })

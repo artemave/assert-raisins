@@ -1,6 +1,6 @@
-const assert = require('assert')
-const {test} = require('../..')
+import { equal } from 'assert'
+import { test } from '../../index.js'
 
 test('fails', () => {
-  assert.equal(1, 2)
+  equal(1, 2)
 })

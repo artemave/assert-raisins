@@ -1,4 +1,4 @@
-import {test, run} from '../..'
+import {test, run} from '../../index.js'
 import assert from 'assert'
 
 (async () => {

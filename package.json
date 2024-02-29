@@ -1,5 +1,6 @@
 {
   "name": "assert-raisins",
+  "type": "module",
   "version": "1.4.0",
   "description": "Minimalistic test runner that does NOT dynamically require test files. And so `ars --inspect-brk` will have all project files loaded.",
   "main": "index.js",
@@ -12,11 +13,13 @@
   },
   "dependencies": {
     "clipboardy": "latest",
-    "glob": "latest"
+    "fast-glob": "^3.3.2"
   },
   "devDependencies": {
     "@types/node": "latest",
+    "eslint": "^8.57.0",
     "ts-node": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "typescript-eslint": "^7.1.0"
   }
 }

@@ -1,5 +1,6 @@
 export function test(name: string, fn: () => void): void
 export namespace test {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function only(name: string, fn: () => void): void
 }
 export { test as it }

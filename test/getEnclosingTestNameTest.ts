@@ -1,5 +1,5 @@
-import {it, run} from '..'
-import getEnclosingTestName from '../lib/getEnclosingTestName'
+import {it, run} from '../index.js'
+import getEnclosingTestName from '../lib/getEnclosingTestName.js'
 import assert from 'assert'
 
 it('finds closest test/it invokation to the line number', function() {

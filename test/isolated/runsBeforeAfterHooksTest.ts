@@ -1,4 +1,4 @@
-import {test, run, beforeFile, beforeEach, beforeSuite} from '../..'
+import { test, run, beforeFile, beforeEach, beforeSuite } from '../../index.js'
 import assert from 'assert'
 
 let invoke = 0

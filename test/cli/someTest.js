@@ -1,5 +1,5 @@
-const {execSync} = require('child_process')
-const {it, run} = require('../..')
+import { execSync } from 'child_process'
+import { it, run } from '../../index.js'
 
 let n = 0
 

@@ -20,10 +20,6 @@ jobs:
       with:
         cache: 'npm'
     - run: yarn
-    - name: Enable globstar
-      run: |
-          export SHELLOPTS
-          SHELLOPTS="$SHELLOPTS:globstar"
-          shopt -s globstar
     - name: Run tests
-      run: yarn test
+      run: |
+        bash -c 'shopt -s globstar && yarn test'

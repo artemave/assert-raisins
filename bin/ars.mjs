@@ -5,7 +5,6 @@ import path from 'path'
 import clipboardy from 'clipboardy'
 import parseArgv from '../lib/parseArgv.js'
 import retry from '../lib/retry.js'
-import getJson from '../lib/getJson.js'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -48,8 +47,8 @@ proc.on('exit', (code, signal) => {
 
 if (child_args.includes('--inspect-brk') && !ars_args.includes('--skip-debug-url-copy-to-clipboard')) {
   await retry(async () => {
-    // TODO: fetch instead of getjson
-    const [inspectorInfo] = await getJson('http://localhost:9229/json/list')
+    const response = await fetch('http://localhost:9229/json/list')
+    const [inspectorInfo] = await response.json()
     const debuggerUrl = inspectorInfo.devtoolsFrontendUrl.replace(/^chrome-/, '')
 
     try {

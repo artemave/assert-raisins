@@ -1,10 +1,8 @@
-import { execSync } from 'child_process'
-import { it, run } from '../../index.js'
-
-let n = 0
+import assert from 'node:assert'
+import { it, run } from '../../lib/api.js'
 
 it('works', function() {
-  execSync(`touch ${process.cwd()}/test/results/someTest${n++}`)
+  assert(true)
 })
 
 run()

@@ -1,5 +1,5 @@
 import {execSync} from 'child_process'
-import {test} from '../../../index.js'
+import {test} from '../../../lib/api.js'
 
 test('also works', () => {
   execSync(`touch ${process.cwd()}/test/results/otherTest`)

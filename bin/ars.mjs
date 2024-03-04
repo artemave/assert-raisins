@@ -48,6 +48,7 @@ proc.on('exit', (code, signal) => {
 
 if (child_args.includes('--inspect-brk') && !ars_args.includes('--skip-debug-url-copy-to-clipboard')) {
   await retry(async () => {
+    // TODO: fetch instead of getjson
     const [inspectorInfo] = await getJson('http://localhost:9229/json/list')
     const debuggerUrl = inspectorInfo.devtoolsFrontendUrl.replace(/^chrome-/, '')
 

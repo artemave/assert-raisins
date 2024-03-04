@@ -1,5 +1,5 @@
 import { equal } from 'assert'
-import { test } from '../../index.js'
+import { test } from '../../lib/api.js'
 
 test('fails', () => {
   equal(1, 2)

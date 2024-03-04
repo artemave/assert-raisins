@@ -1,5 +1,4 @@
-# Assert-raisins [![Codeship Status for artemave/assert-raisins](https://app.codeship.com/projects/3127301f-c33a-4a4d-a68a-c2c0659bdfef/status?branch=master)](https://app.codeship.com/projects/430410)
-
+# Assert-raisins
 Minimalistic, debugger friendly test runner for Node.
 
 ## Features

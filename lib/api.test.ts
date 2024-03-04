@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import { test, beforeEach, beforeFile, beforeSuite, run } from './api.js'
+import { test, beforeEach, beforeAll, run } from './api.js'
 import { it, describe } from 'node:test'
 
 describe('api', function() {
@@ -37,57 +37,14 @@ describe('api', function() {
     })
   })
 
-  describe('beforeSuite', function() {
-    it('runs once per suite', async function() {
-      let invoke = 0
-      const testFile1 = { tests: [], beforeFile: [], beforeEach: [] }
-      const testFile2 = { tests: [], beforeFile: [], beforeEach: [] }
-
-      beforeSuite(() => { invoke++ })
-
-      test('test 1', () => {}, testFile1)
-      test('test 2', () => {}, testFile2)
-
-      await run({ stdout: { write() {} }, suite: { testFile1, testFile2 } })
-
-      assert.equal(invoke, 1)
-    })
-
-    it('can cleanup after itself', async function() {
-      let invoke = 0
-
-      beforeSuite(cleanup => { cleanup(() => { invoke++ }) })
-      test('test 1', () => {})
-
-      await run({ stdout: { write() {} } })
-
-      assert.equal(invoke, 1)
-    })
-
-    it('can cleanup multiple times', async function() {
-      let invoke = 0
-
-      beforeSuite(cleanup => {
-        cleanup(() => { invoke++ })
-        cleanup(() => { invoke++ })
-      })
-
-      test('test 1', () => {})
-
-      await run({ stdout: { write() {} } })
-
-      assert.equal(invoke, 2)
-    })
-  })
-
-  describe('beforeFile', function() {
+  describe('beforeAll', function() {
     it('runs once per file', async function() {
       let invoke = 0
-      const testFile1 = { tests: [], beforeFile: [], beforeEach: [] }
-      const testFile2 = { tests: [], beforeFile: [], beforeEach: [] }
+      const testFile1 = { tests: [], beforeAll: [], beforeEach: [] }
+      const testFile2 = { tests: [], beforeAll: [], beforeEach: [] }
 
-      beforeFile(() => { invoke++ }, testFile1)
-      beforeFile(() => { invoke++ }, testFile2)
+      beforeAll(() => { invoke++ }, testFile1)
+      beforeAll(() => { invoke++ }, testFile2)
 
       test('test 1', () => {}, testFile1)
       test('test 11', () => {}, testFile1)
@@ -102,7 +59,7 @@ describe('api', function() {
     it('can cleanup after itself', async function() {
       let invoke = 0
 
-      beforeFile(cleanup => { cleanup(() => { invoke++ }) })
+      beforeAll(cleanup => { cleanup(() => { invoke++ }) })
       test('test 1', () => {})
 
       await run({ stdout: { write() {} } })
@@ -113,7 +70,7 @@ describe('api', function() {
     it('can cleanup multiple times', async function() {
       let invoke = 0
 
-      beforeFile(cleanup => {
+      beforeAll(cleanup => {
         cleanup(() => { invoke++ })
         cleanup(() => { invoke++ })
       })

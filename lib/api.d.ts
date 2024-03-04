@@ -9,7 +9,7 @@ export interface Test {
 
 export interface TestFile {
   tests: Array<Test>
-  beforeFile: Array<HookFn>
+  beforeAll: Array<HookFn>
   beforeEach: Array<HookFn>
 }
 
@@ -20,9 +20,8 @@ export namespace test {
 }
 export { test as it }
 
-export declare function beforeSuite(fn: HookFn): void
 export declare function beforeEach(fn: HookFn, testFile?: TestFile): void
-export declare function beforeFile(fn: HookFn, testFile?: TestFile): void
+export declare function beforeAll(fn: HookFn, testFile?: TestFile): void
 
 export declare function run({ only, stdout }?: {
   only?: string

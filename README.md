@@ -50,8 +50,7 @@ Other things available:
 - `it` which is an alias for `test`
 - `test.only()` to run single test (also available as a command line argument: `--only='some test'`)
 - `beforeEach()` to run some code before each test in a file
-- `beforeFile()` to run some code before all tests in a file
-- `beforeSuite()` to run some code before all tests
+- `beforeAll()` to run some code before all tests in a file
 
 Each hook callback is passed a cleanup function:
 

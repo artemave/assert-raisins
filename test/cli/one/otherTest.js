@@ -1,10 +1,10 @@
-import {execSync} from 'child_process'
+import assert from 'node:assert'
 import {test} from '../../../lib/api.js'
 
 test('also works', () => {
-  execSync(`touch ${process.cwd()}/test/results/otherTest`)
+  assert.ok(true)
 })
 
 test('really "really" works', () => {
-  execSync(`touch ${process.cwd()}/test/results/otherTest2`)
+  assert.ok(true)
 })

@@ -21,5 +21,4 @@ jobs:
         cache: 'npm'
     - run: yarn
     - name: Run tests
-      run: |
-        bash -c 'shopt -s globstar && yarn test'
+      run: yarn test

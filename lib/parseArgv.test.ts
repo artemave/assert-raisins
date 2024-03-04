@@ -17,7 +17,7 @@ describe('parseArgv', function() {
       'test/*Test.js': ['./file1', './file2']
     }))
     assert.deepEqual(args, {
-      file_args: [`--import=${path.resolve('./file1')}`, `--import=${path.resolve('./file2')}`],
+      file_args: ['--import=./file1', '--import=./file2'],
       node_args: [],
       ars_args: []
     })
@@ -40,7 +40,7 @@ describe('parseArgv', function() {
       'test/*Test.js': ['./file1', './file2']
     }))
     assert.deepEqual(args, {
-      file_args: [`--import=${path.resolve('./file1')}`, `--import=${path.resolve('./file2')}`],
+      file_args: ['--import=./file1', '--import=./file2'],
       node_args: ['--stuff'],
       ars_args: ['--only=bananas']
     })

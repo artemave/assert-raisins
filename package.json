@@ -12,7 +12,6 @@
     "test": "node --test --enable-source-maps --loader ts-node/esm lib/*.test.ts && node --test index.test.js"
   },
   "dependencies": {
-    "clipboardy": "latest",
     "fast-glob": "^3.3.2"
   },
   "devDependencies": {

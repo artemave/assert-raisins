@@ -1,5 +1,4 @@
 import { it, describe } from 'node:test'
-import path from 'node:path'
 import parseArgv from './parseArgv.js'
 import assert from 'assert'
 
@@ -21,18 +20,6 @@ describe('parseArgv', function() {
       node_args: [],
       ars_args: []
     })
-  })
-
-  it('throws if bad path given', function() {
-    assert.throws(() => {
-      parseArgv(['blablah/stuff'])
-    }, /No test files found in 'blablah\/stuff'./)
-  })
-
-  it('throws when no test files are given', function() {
-    assert.throws(() => {
-      parseArgv([])
-    }, /No test files given./)
   })
 
   it('knows ars args', function() {

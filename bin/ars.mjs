@@ -14,7 +14,7 @@ if (['--help', '-h'].some(o => node_args.includes(o))) {
   console.info('Usage: ars [node options] [ars options] [files]')
   console.info('')
   console.info('Options:')
-  console.info(' --only="bananas"                         only run test named "bananas"')
+  console.info(' --only="bananas"                         only run tests where name matches "bananas"')
   process.exit()
 }
 
@@ -30,7 +30,17 @@ const child_args = [
   ...ars_args
 ]
 
-const proc = spawn(process.execPath, child_args, { stdio: 'inherit' })
+const proc = spawn(
+  process.execPath,
+  child_args,
+  {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      TEST_WORKER_ID: 0
+    }
+  }
+)
 
 proc.on('exit', (code, signal) => {
   process.on('exit', () => {

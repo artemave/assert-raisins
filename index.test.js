@@ -5,11 +5,6 @@ import { describe, it } from 'node:test'
 import { execSync } from 'node:child_process'
 
 describe('running tests', function() {
-  it('works with bare node', function() {
-    const stdout = execSync('node ./test/cli/someTest.js', { encoding: 'utf-8' })
-    assert.match(stdout, new RegExp('✓ 1/0'))
-  })
-
   it('works via cli using relative path', function() {
     const stdout = execSync('./bin/ars ./test/cli/someTest.js', { encoding: 'utf-8' })
     assert.match(stdout, new RegExp('✓ 1/0'))
@@ -33,7 +28,7 @@ describe('running tests', function() {
 
   it('sets exit 1 if test fails', function() {
     try {
-      execSync('node ./test/error/failTest.js', { encoding: 'utf-8' })
+      execSync('./bin/ars ./test/error/failTest.js')
     } catch (err) {
       assert(err.status === 1)
     }

@@ -5,10 +5,10 @@ Minimalistic, debugger friendly test runner for Node.
 ## Features
 
 - fast
-- parallel (when running more than test file)
-- runs test for a line number (failing tests can be rerun by copying a line from a stacktrace)
+- parallel
+- run test for a line number
 - no nesting
-- no separate `after*` callbacks (instead each `before*` can register cleanup)
+- combined `before*` and `after*` hooks
 - esm
 - typescript types included
 

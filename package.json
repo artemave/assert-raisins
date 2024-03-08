@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": "github:artemave/assert-raisins",
   "scripts": {
-    "test": "node --test --enable-source-maps --loader ts-node/esm lib/*.test.ts && node --test lib/*.test.js index.test.js"
+    "test": "node --test --enable-source-maps --loader ts-node/esm lib/*.test.ts && node --test --test-concurrency=1 lib/*.test.js index.test.js"
   },
   "dependencies": {
     "fast-glob": "^3.3.2"

@@ -2,12 +2,12 @@ export type TestFn = () => void | Promise<void>
 export type CleanupFn = (fn: () => void | Promise<void>) => void
 export type HookFn = (fn: CleanupFn) => void | Promise<void>
 
-export interface Test {
+interface Test {
   name: string
   fn: TestFn
 }
 
-export interface TestFile {
+interface TestFile {
   tests: Array<Test>
   beforeAll: Array<HookFn>
   beforeEach: Array<HookFn>
@@ -22,9 +22,3 @@ export { test as it }
 
 export declare function beforeEach(fn: HookFn, testFile?: TestFile): void
 export declare function beforeAll(fn: HookFn, testFile?: TestFile): void
-
-export declare function run({ only, stdout }?: {
-  only?: string
-  stdout?: { write: (text: string) => void }
-  suite?: Record<string, TestFile>
-}): Promise<boolean | undefined>

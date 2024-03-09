@@ -1,3 +1,5 @@
+let g:vigun_test_keywords = ['it', 'describe']
+
 let g:vigun_mappings = [
       \ {
       \   'pattern': 'test/.*Test.ts$',
@@ -14,11 +16,11 @@ let g:vigun_mappings = [
       \ {
       \   'pattern': '.*\.test\.ts$',
       \   'all': "node --test --enable-source-maps --loader ts-node/esm #{file}",
-      \   'nearest': 'node --test --enable-source-maps --loader ts-node/esm --test-name-pattern="#{nearest_test}" #{file}'
+      \   'nearest': 'node --test --enable-source-maps --loader ts-node/esm --test-name-pattern=#{nearest_test} #{file}'
       \ },
       \ {
       \   'pattern': '.*\.test\.js$',
       \   'all': "node --test #{file}",
-      \   'nearest': 'node --test --test-name-pattern="#{nearest_test}" #{file}'
+      \   'nearest': 'node --test --test-name-pattern=#{nearest_test} #{file}'
       \ },
       \]

@@ -1,5 +1,6 @@
 import assert from 'node:assert'
-import { test, beforeEach, beforeAll, run } from './api.js'
+import { test, beforeEach, beforeAll } from './api.js'
+import { run } from './run.js'
 import { it, describe } from 'node:test'
 
 describe('api', function() {
@@ -42,6 +43,9 @@ describe('api', function() {
       let invoke = 0
       const testFile1 = { tests: [], beforeAll: [], beforeEach: [] }
       const testFile2 = { tests: [], beforeAll: [], beforeEach: [] }
+      const currentSuite = {
+        testFiles: { testFile1, testFile2 }
+      }
 
       beforeAll(() => { invoke++ }, testFile1)
       beforeAll(() => { invoke++ }, testFile2)
@@ -51,7 +55,7 @@ describe('api', function() {
       test('test 2', () => {}, testFile2)
       test('test 22', () => {}, testFile2)
 
-      await run({ stdout: { write() {} }, suite: { testFile1, testFile2 } })
+      await run({ stdout: { write() {} }, currentSuite })
 
       assert.equal(invoke, 2)
     })

@@ -4,7 +4,9 @@
   "version": "1.4.0",
   "description": "Minimalistic test runner that does NOT dynamically require test files. And so `ars --inspect-brk` will have all project files loaded.",
   "main": "index.js",
-  "bin": "bin/ars",
+  "bin": {
+    "ars": "./bin/ars.mjs"
+  },
   "author": "github.com/artemave",
   "license": "MIT",
   "repository": "github:artemave/assert-raisins",

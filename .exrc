@@ -4,12 +4,12 @@ let g:vigun_mappings = [
       \ {
       \   'pattern': 'test/.*Test.ts$',
       \   'all': "./bin/ars --enable-source-maps --loader ts-node/esm #{file}",
-      \   'nearest': "./bin/ars --enable-source-maps --loader ts-node/esm #{file}:#{line}",
+      \   'nearest': "./bin/ars.mjs --enable-source-maps --loader ts-node/esm #{file}:#{line}",
       \   'debug-nearest': './bin/ars --enable-source-maps --loader ts-node/esm --inspect-brk #{file}:#{line}',
       \ },
       \ {
       \   'pattern': 'test/.*Test.js$',
-      \   'all': "./bin/ars #{file}",
+      \   'all': "./bin/ars.mjs #{file}",
       \   'nearest': "./bin/ars #{file}:#{line}",
       \   'debug-nearest': './bin/ars --inspect-brk #{file}:#{line}',
       \ },

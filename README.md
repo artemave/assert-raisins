@@ -64,3 +64,7 @@ beforeEach(async (cleanup) => {
   cleanup(async () => await server.stop())
 })
 ```
+
+### Parallel tests
+
+When more than one test file is run, the load is distributed between concurrent workers (limited by the number of CPU cores). Each workers is passed `TEST_WORKER_ID` environment variable (so you can, for instance, create that many test databases).

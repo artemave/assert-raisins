@@ -5,7 +5,7 @@
   "description": "Minimalistic test runner that does NOT dynamically require test files. And so `ars --inspect-brk` will have all project files loaded.",
   "main": "index.js",
   "bin": {
-    "ars": "./bin/ars.mjs"
+    "ars": "./bin/runner.js"
   },
   "author": "github.com/artemave",
   "license": "MIT",

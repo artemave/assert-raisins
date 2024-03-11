@@ -43,13 +43,9 @@ Run individual test:
     # by line number
     ./node_modules/.bin/ars test/someTest.js:123
 
-    # or using --only option
-    ./node_modules/.bin/ars --only='when bananas' test/someTest.js
-
 Other things available:
 
 - `it` which is an alias for `test`
-- `test.only()` to run single test (also available as a command line argument: `--only='some test'`)
 - `beforeEach()` to run some code before each test in a file
 - `beforeAll()` to run some code before all tests in a file
 

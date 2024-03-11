@@ -16,20 +16,20 @@ describe('parseArgv', function() {
       'test/*Test.js': ['./file1', './file2']
     }))
     assert.deepEqual(args, {
-      file_args: ['--import=./file1', '--import=./file2'],
-      node_args: [],
-      ars_args: []
+      files: ['./file1', './file2'],
+      options: {}
     })
   })
 
-  it('knows ars args', function() {
-    const args = parseArgv(['--stuff', '--only=bananas', 'test/*Test.js'], new FakeGlob({
-      'test/*Test.js': ['./file1', './file2']
-    }))
-    assert.deepEqual(args, {
-      file_args: ['--import=./file1', '--import=./file2'],
-      node_args: ['--stuff'],
-      ars_args: ['--only=bananas']
-    })
+  it('accepts valid options', function() {
+    const { options } = parseArgv(['--help'])
+    assert(options.help)
   })
+
+  it('ignores invalid options', function() {
+    const { options } = parseArgv(['--apple'])
+    assert.deepEqual(options, {})
+  })
+
+  it.todo('turns path with line number into `only` option')
 })

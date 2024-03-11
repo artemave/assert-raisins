@@ -16,20 +16,6 @@ describe('api', function() {
       assert.equal(invoke, 2)
     })
 
-    it('runs only one test', async function() {
-      let invoke = 0
-      let testName
-
-      test.only('test 1', () => { invoke++; testName = 'test1' })
-      test.only('test 3', () => { invoke++; testName = 'test3' })
-      test('test 2', async () => { await Promise.resolve(invoke++) })
-
-      await run({ stdout: { write() {} } })
-
-      assert.equal(invoke, 1)
-      assert.equal(testName, 'test1')
-    })
-
     it('runs faliing test', async function() {
       test('test 1', () => { assert.ok(false) })
 

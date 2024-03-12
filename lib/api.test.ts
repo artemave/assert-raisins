@@ -1,9 +1,19 @@
 import assert from 'node:assert'
 import { test, beforeEach, beforeAll } from './api.js'
-import { run } from './run.js'
-import { it, describe } from 'node:test'
+import { run, TestReport, Reporter } from './run.js'
+import { it, describe, beforeEach as nodeBeforeEach } from 'node:test'
 
 describe('api', function() {
+  let reporter: Reporter
+  let messages: Array<TestReport>
+
+  nodeBeforeEach(function() {
+    messages = []
+    reporter = {
+      report: msg => messages.push(msg)
+    }
+  })
+
   describe('run', function() {
     it('runs tests', async function() {
       let invoke = 0
@@ -11,16 +21,32 @@ describe('api', function() {
       test('test 1', () => { invoke++ })
       test('test 2', async () => { await Promise.resolve(invoke++) })
 
-      await run({ stdout: { write() {} } })
+      await run({ reporter })
 
       assert.equal(invoke, 2)
+      assert.deepStrictEqual(
+        messages,
+        [
+          {
+            fileName: 'lib/api.test.ts',
+            testName: 'test 1'
+          },
+          {
+            fileName: 'lib/api.test.ts',
+            testName: 'test 2'
+          }
+        ]
+      )
     })
 
     it('runs faliing test', async function() {
       test('test 1', () => { assert.ok(false) })
 
-      const result = await run({ stdout: { write() {} } })
-      assert.deepStrictEqual(result, false)
+      await run({ reporter })
+
+      assert.equal(messages.length, 1)
+      assert.equal(messages[0].fileName, 'lib/api.test.ts')
+      assert.equal(messages[0].error?.constructor.name, 'AssertionError')
     })
   })
 
@@ -41,7 +67,7 @@ describe('api', function() {
       test('test 2', () => {}, testFile2)
       test('test 22', () => {}, testFile2)
 
-      await run({ stdout: { write() {} }, currentSuite })
+      await run({ reporter, currentSuite })
 
       assert.equal(invoke, 2)
     })
@@ -52,7 +78,7 @@ describe('api', function() {
       beforeAll(cleanup => { cleanup(() => { invoke++ }) })
       test('test 1', () => {})
 
-      await run({ stdout: { write() {} } })
+      await run({ reporter })
 
       assert.equal(invoke, 1)
     })
@@ -67,7 +93,7 @@ describe('api', function() {
 
       test('test 1', () => {})
 
-      await run({ stdout: { write() {} } })
+      await run({ reporter })
 
       assert.equal(invoke, 2)
     })
@@ -82,7 +108,7 @@ describe('api', function() {
       test('test 1', () => {})
       test('test 2', () => {})
 
-      await run({ stdout: { write() {} } })
+      await run({ reporter })
 
       assert.equal(invoke, 2)
     })
@@ -93,7 +119,7 @@ describe('api', function() {
       beforeEach(cleanup => { cleanup(() => { invoke++ }) })
       test('test 1', () => {})
 
-      await run({ stdout: { write() {} } })
+      await run({ reporter })
 
       assert.equal(invoke, 1)
     })
@@ -108,7 +134,7 @@ describe('api', function() {
 
       test('test 1', () => {})
 
-      await run({ stdout: { write() {} } })
+      await run({ reporter })
 
       assert.equal(invoke, 2)
     })

@@ -7,23 +7,23 @@ import { execSync } from 'node:child_process'
 describe('running tests', function() {
   it('works via cli using relative path', function() {
     const stdout = execSync('./bin/runner.js ./test/cli/someTest.js', { encoding: 'utf-8' })
-    assert.match(stdout, new RegExp('✓ 1/0'))
+    assert.match(stdout, new RegExp('1/0'))
   })
 
   it('works via cli using absolute path', function() {
     const stdout = execSync(`./bin/runner.js ${path.resolve('./test/cli/someTest.js')}`, { encoding: 'utf-8' })
-    assert.match(stdout, new RegExp('✓ 1/0'))
+    assert.match(stdout, new RegExp('1/0'))
   })
 
   it('works via cli using short path', function() {
     const stdout = execSync('./bin/runner.js test/cli/someTest.js', { encoding: 'utf-8' })
-    assert.match(stdout, new RegExp('✓ 1/0'))
+    assert.match(stdout, new RegExp('1/0'))
   })
 
   it('takes a glob for list of files', function() {
     const stdout = execSync('./bin/runner.js "./test/cli/**/*Test.js"', { encoding: 'utf-8' })
-    assert.match(stdout, new RegExp('✓ 2/0'))
-    assert.match(stdout, new RegExp('✓ 1/0'))
+    assert.match(stdout, new RegExp('2/0'))
+    assert.match(stdout, new RegExp('1/0'))
   })
 
   it('sets exit 1 if test fails', function() {
@@ -36,7 +36,7 @@ describe('running tests', function() {
 
   it('accepts line number', function() {
     const stdout = execSync('./bin/runner.js test/cli/one/otherTest.js:9', { encoding: 'utf-8' })
-    assert.match(stdout, new RegExp('✓ 1/0'))
+    assert.match(stdout, new RegExp('1/0'))
   })
 
   it('runs parallel tests only once', async function() {

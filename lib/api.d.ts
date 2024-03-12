@@ -1,17 +1,4 @@
-export type TestFn = () => void | Promise<void>
-export type CleanupFn = (fn: () => void | Promise<void>) => void
-export type HookFn = (fn: CleanupFn) => void | Promise<void>
-
-interface Test {
-  name: string
-  fn: TestFn
-}
-
-interface TestFile {
-  tests: Array<Test>
-  beforeAll: Array<HookFn>
-  beforeEach: Array<HookFn>
-}
+import { TestFile, TestFn, HookFn } from './run'
 
 export function test(name: string, fn: TestFn, testFile?: TestFile): void
 export { test as it }

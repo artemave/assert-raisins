@@ -23,9 +23,11 @@ if (files.length === 1) {
   await import(files[0])
   let code
 
+  const fileName = files[0].replace(process.cwd() + '/', '')
+
   try {
-    const success = await run(Object.assign({ reporter }, options))
-    code = success ? 0 : 1
+    await run(Object.assign({ reporter, fileName }, options))
+    code = reporter.passed ? 0 : 1
   } catch (e) {
     console.error(e)
     code = 1
@@ -40,30 +42,25 @@ if (files.length === 1) {
       import(job.payload)
     ])
 
-    const testName = job.payload.replace(process.cwd() + '/', '')
-    const currentSuite = {
-      testFiles: {
-        [testName]: Object.values(suite.testFiles)[0]
-      }
-    }
+    const fileName = job.payload.replace(process.cwd() + '/', '')
     const reporter = {
       report(msg) {
-        parentPort.postMessage({ progress: msg })
+        parentPort.postMessage(msg)
       }
     }
 
-    return run({ currentSuite, reporter })
+    return run({ fileName, reporter })
   }`
 
-  const results = await ConcurrentJobProcessor.processJobs(
+  await ConcurrentJobProcessor.processJobs(
     files,
     jobFn,
-    (msg) => {
+    msg => {
       reporter.report(msg)
     }
   )
 
   reporter.printSummary()
 
-  process.exit(results.every(Boolean) ? 0 : 1)
+  process.exit(reporter.passed ? 0 : 1)
 }

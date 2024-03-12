@@ -21,18 +21,18 @@ describe('api', function() {
       test('test 1', () => { invoke++ })
       test('test 2', async () => { await Promise.resolve(invoke++) })
 
-      await run({ reporter })
+      await run({ fileName: 'file1', reporter })
 
       assert.equal(invoke, 2)
       assert.deepStrictEqual(
         messages,
         [
           {
-            fileName: 'lib/api.test.ts',
+            fileName: 'file1',
             testName: 'test 1'
           },
           {
-            fileName: 'lib/api.test.ts',
+            fileName: 'file1',
             testName: 'test 2'
           }
         ]
@@ -42,10 +42,10 @@ describe('api', function() {
     it('runs faliing test', async function() {
       test('test 1', () => { assert.ok(false) })
 
-      await run({ reporter })
+      await run({ fileName: 'file2', reporter })
 
       assert.equal(messages.length, 1)
-      assert.equal(messages[0].fileName, 'lib/api.test.ts')
+      assert.equal(messages[0].fileName, 'file2')
       assert.equal(messages[0].error?.constructor.name, 'AssertionError')
     })
   })
@@ -53,23 +53,14 @@ describe('api', function() {
   describe('beforeAll', function() {
     it('runs once per file', async function() {
       let invoke = 0
-      const testFile1 = { tests: [], beforeAll: [], beforeEach: [] }
-      const testFile2 = { tests: [], beforeAll: [], beforeEach: [] }
-      const currentSuite = {
-        testFiles: { testFile1, testFile2 }
-      }
+      beforeAll(() => { invoke++ })
 
-      beforeAll(() => { invoke++ }, testFile1)
-      beforeAll(() => { invoke++ }, testFile2)
+      test('test 1', () => {})
+      test('test 11', () => {})
 
-      test('test 1', () => {}, testFile1)
-      test('test 11', () => {}, testFile1)
-      test('test 2', () => {}, testFile2)
-      test('test 22', () => {}, testFile2)
+      await run({ reporter, fileName: 'file3' })
 
-      await run({ reporter, currentSuite })
-
-      assert.equal(invoke, 2)
+      assert.equal(invoke, 1)
     })
 
     it('can cleanup after itself', async function() {
@@ -78,7 +69,7 @@ describe('api', function() {
       beforeAll(cleanup => { cleanup(() => { invoke++ }) })
       test('test 1', () => {})
 
-      await run({ reporter })
+      await run({ reporter, fileName: 'file3' })
 
       assert.equal(invoke, 1)
     })
@@ -93,7 +84,7 @@ describe('api', function() {
 
       test('test 1', () => {})
 
-      await run({ reporter })
+      await run({ reporter, fileName: 'file3' })
 
       assert.equal(invoke, 2)
     })
@@ -108,7 +99,7 @@ describe('api', function() {
       test('test 1', () => {})
       test('test 2', () => {})
 
-      await run({ reporter })
+      await run({ reporter, fileName: 'file3' })
 
       assert.equal(invoke, 2)
     })
@@ -119,7 +110,7 @@ describe('api', function() {
       beforeEach(cleanup => { cleanup(() => { invoke++ }) })
       test('test 1', () => {})
 
-      await run({ reporter })
+      await run({ reporter, fileName: 'file3' })
 
       assert.equal(invoke, 1)
     })
@@ -134,7 +125,7 @@ describe('api', function() {
 
       test('test 1', () => {})
 
-      await run({ reporter })
+      await run({ reporter, fileName: 'file3' })
 
       assert.equal(invoke, 2)
     })

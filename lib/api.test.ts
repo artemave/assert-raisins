@@ -3,6 +3,8 @@ import { test, beforeEach, beforeAll } from './api.js'
 import { run, TestReport, Reporter } from './run.js'
 import { it, describe, beforeEach as nodeBeforeEach } from 'node:test'
 
+const context = describe
+
 describe('api', function() {
   let reporter: Reporter
   let messages: Array<TestReport>
@@ -39,7 +41,7 @@ describe('api', function() {
       )
     })
 
-    it('runs faliing test', async function() {
+    it('runs failing test', async function() {
       test('test 1', () => { assert.ok(false) })
 
       await run({ fileName: 'file2', reporter })
@@ -47,6 +49,29 @@ describe('api', function() {
       assert.equal(messages.length, 1)
       assert.equal(messages[0].fileName, 'file2')
       assert.equal(messages[0].error?.constructor.name, 'AssertionError')
+    })
+
+    describe('only', function() {
+      it('runs only test with the matching name', async function() {
+        test('test 1', () => {})
+        test('test 2', () => {})
+
+        await run({ only: 'test 1', fileName: 'file3', reporter })
+
+        assert.equal(messages.length, 1)
+        assert.equal(messages[0].testName, 'test 1')
+      })
+
+      context('no matching test', function() {
+        it('throws an error', function() {
+          test('test 1', () => {})
+
+          return assert.rejects(
+            async () => await run({ only: 'test 2', fileName: 'file3', reporter }),
+            { message: 'No tests found' }
+          )
+        })
+      })
     })
   })
 
@@ -88,6 +113,25 @@ describe('api', function() {
 
       assert.equal(invoke, 2)
     })
+
+    context('when it fails', function() {
+      it('tests are skipped', async function() {
+        const error = new Error('fail')
+        beforeAll(() => { throw error })
+        test('test 1', () => {})
+
+        await run({ reporter, fileName: 'file3' })
+
+        assert.deepStrictEqual(
+          messages, [{
+            fileName: 'file3',
+            beforeAll: {
+              error
+            }
+          }]
+        )
+      })
+    })
   })
 
   describe('beforeEach', function() {
@@ -128,6 +172,25 @@ describe('api', function() {
       await run({ reporter, fileName: 'file3' })
 
       assert.equal(invoke, 2)
+    })
+
+    context('when it fails', function() {
+      it('tests are skipped', async function() {
+        const error = new Error('fail')
+        beforeEach(() => { throw error })
+        test('test 1', () => {})
+
+        await run({ reporter, fileName: 'file3' })
+
+        assert.deepStrictEqual(
+          messages, [{
+            fileName: 'file3',
+            beforeEach: {
+              error
+            }
+          }]
+        )
+      })
     })
   })
 })

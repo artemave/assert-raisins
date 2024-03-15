@@ -2,6 +2,8 @@
 
 Minimalistic, debugger friendly test runner for Node.
 
+Inspired by [baretest](https://github.com/volument/baretest)
+
 ## Features
 
 - fast
@@ -17,7 +19,6 @@ Minimalistic, debugger friendly test runner for Node.
 Install:
 
     npm i --save-dev assert-raisins
-
 
 Write a test `test/firstTest.js`:
 

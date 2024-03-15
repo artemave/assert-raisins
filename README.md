@@ -75,3 +75,11 @@ beforeEach(async () => {
 ### Parallel tests
 
 When more than one test file is run, the load is distributed between concurrent workers (limited by the number of CPU cores). Each workers is passed `TEST_WORKER_ID` environment variable (so you can, for instance, create that many test databases).
+
+### typescript, jsx, sourcemaps, code coverage
+
+Use `NODE_OPTIONS` environment variable for any of that. For example, for typescript:
+
+```sh
+NODE_OPTIONS="--enable-source-maps --loader ts-node/esm" ./node_modules/.bin/ars test/*.test.ts
+```

@@ -10,7 +10,7 @@ Inspired by [baretest](https://github.com/volument/baretest)
 - parallel
 - run test for a line number
 - no nesting
-- combined `before*` and `after*` hooks
+- better test cleanup (than after hooks)
 - esm
 - typescript types included
 
@@ -50,15 +50,25 @@ Other things available:
 - `beforeEach()` to run some code before each test in a file
 - `beforeAll()` to run some code before all tests in a file
 
-Each hook callback is passed a cleanup function:
+### Test cleanup
+
+Use `cleanup` function to register some cleanup hook. If it happens to be called within `beforeAll`, it will be executed "after all". If it's called within `beforeEach`, it'll be run "after each", and if it's called within a test, it will be executed after that test. `cleanup` can be invoked multiple times.
+
+In this example, the server will be stopped after each test:
 
 ```javascript
-beforeEach(async (cleanup) => {
+import { cleanup } from 'assert-raisins'
+
+class Server {
+  start() {
+    ...
+    cleanup(() => this.stop())
+  }
+}
+
+beforeEach(async () => {
   const server = new Server()
   await server.start()
-
-  // can be invoked multiple times
-  cleanup(async () => await server.stop())
 })
 ```
 

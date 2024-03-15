@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import { test, beforeEach, beforeAll } from './api.js'
+import { test, beforeEach, beforeAll, cleanup } from './api.js'
 import { run, TestReport, Reporter } from './run.js'
 import { it, describe, beforeEach as nodeBeforeEach } from 'node:test'
 
@@ -51,6 +51,20 @@ describe('api', function() {
       assert.equal(messages[0].error?.constructor.name, 'AssertionError')
     })
 
+    describe('cleanup', function() {
+      it('cleans up only for this test', async function() {
+        let invoke = 0
+        test('test 1', () => {
+          cleanup(() => { invoke++ })
+        })
+        test('test 2', () => {})
+
+        await run({ fileName: 'file3', reporter })
+
+        assert.equal(invoke, 1)
+      })
+    })
+
     describe('only', function() {
       it('runs only test with the matching name', async function() {
         test('test 1', () => {})
@@ -80,19 +94,23 @@ describe('api', function() {
       let invoke = 0
       beforeAll(() => { invoke++ })
 
-      test('test 1', () => {})
-      test('test 11', () => {})
+      test('test 1', () => {
+        assert.equal(invoke, 1)
+      })
+      test('test 11', () => {
+        assert.equal(invoke, 1)
+      })
 
       await run({ reporter, fileName: 'file3' })
-
-      assert.equal(invoke, 1)
     })
 
-    it('can cleanup after itself', async function() {
+    it('cleans up after all tests', async function() {
       let invoke = 0
 
-      beforeAll(cleanup => { cleanup(() => { invoke++ }) })
-      test('test 1', () => {})
+      beforeAll(() => { cleanup(() => { invoke++ }) })
+      test('test 1', () => {
+        assert.equal(invoke, 0)
+      })
 
       await run({ reporter, fileName: 'file3' })
 
@@ -102,7 +120,7 @@ describe('api', function() {
     it('can cleanup multiple times', async function() {
       let invoke = 0
 
-      beforeAll(cleanup => {
+      beforeAll(() => {
         cleanup(() => { invoke++ })
         cleanup(() => { invoke++ })
       })
@@ -140,18 +158,20 @@ describe('api', function() {
 
       beforeEach(() => { invoke++ })
 
-      test('test 1', () => {})
-      test('test 2', () => {})
+      test('test 1', () => {
+        assert.equal(invoke, 2)
+      })
+      test('test 2', () => {
+        assert.equal(invoke, 2)
+      })
 
       await run({ reporter, fileName: 'file3' })
-
-      assert.equal(invoke, 2)
     })
 
-    it('can cleanup after itself', async function() {
+    it('cleans up after each test', async function() {
       let invoke = 0
 
-      beforeEach(cleanup => { cleanup(() => { invoke++ }) })
+      beforeEach(() => { cleanup(() => { invoke++ }) })
       test('test 1', () => {})
 
       await run({ reporter, fileName: 'file3' })
@@ -162,7 +182,7 @@ describe('api', function() {
     it('can cleanup multiple times', async function() {
       let invoke = 0
 
-      beforeEach(cleanup => {
+      beforeEach(() => {
         cleanup(() => { invoke++ })
         cleanup(() => { invoke++ })
       })

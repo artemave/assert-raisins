@@ -6,7 +6,7 @@ Inspired by [baretest](https://github.com/volument/baretest)
 
 ## Features
 
-- fast
+- [fast](https://github.com/artemave/node-test-runners-performance-comparison)
 - parallel
 - run test for a line number
 - no nesting
@@ -74,7 +74,7 @@ beforeEach(async () => {
 
 ### Parallel tests
 
-When more than one test file is run, the load is distributed between concurrent workers (limited by the number of CPU cores). Each workers is passed `TEST_WORKER_ID` environment variable (so you can, for instance, create that many test databases).
+When running multiple test files, the load is distributed between concurrent workers (limited by the number of CPU cores). Each worker is passed `TEST_WORKER_ID` environment variable (so you can, for instance, create that many test databases).
 
 ### typescript, jsx, sourcemaps, code coverage
 

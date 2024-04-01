@@ -2,7 +2,7 @@
   "name": "assert-raisins",
   "type": "module",
   "version": "2.0.0",
-  "description": "Minimalistic test runner that does NOT dynamically require test files. And so `ars --inspect-brk` will have all project files loaded.",
+  "description": "Minimalistic Node test runner.",
   "main": "index.js",
   "bin": {
     "ars": "./bin/runner.js"
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": "github:artemave/assert-raisins",
   "scripts": {
-    "test": "node --test --enable-source-maps --loader ts-node/esm lib/*.test.ts && node --test --test-concurrency=1 lib/*.test.js index.test.js",
+    "test": "node --test --enable-source-maps --loader ts-node/esm lib/**/*.test.ts && node --test --test-concurrency=1 lib/**/*.test.js index.test.js",
     "lint": "tsc"
   },
   "dependencies": {

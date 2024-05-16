@@ -1,1 +1,1 @@
-export { test, it, beforeEach, beforeAll } from "./lib/api.js"
+export { test, it, beforeEach, beforeAll, cleanup } from "./lib/api.js"

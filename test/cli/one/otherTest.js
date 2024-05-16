@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import {test} from '../../../lib/api.js'
+import {test} from '../../../index.js'
 
 test('also works', () => {
   assert.ok(true)

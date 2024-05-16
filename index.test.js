@@ -45,4 +45,21 @@ describe('running tests', function() {
     const files = glob.sync('./test/tmp/someTest*')
     assert.equal(files.length, 1)
   })
+
+  it('exposes the whole API', function () {
+    const stdout = execSync('./bin/runner.js "./test/api/kitchenSinkTest.js"', {
+      encoding: 'utf-8',
+    })
+    const logs = [
+      'beforeAll',
+      'beforeEach',
+      'test',
+      'cleanup beforeEach',
+      'beforeEach',
+      'it',
+      'cleanup beforeEach',
+      'cleanup beforeAll'
+    ]
+    assert.match(stdout.trim(), new RegExp(logs.join('[\\n\\s\\S]+'), 'g'))
+  });
 })

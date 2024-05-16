@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import assert from 'node:assert'
-import { it, beforeEach } from '../../lib/api.js'
+import { it, beforeEach } from '../../index.js'
 
 beforeEach(function() {
   fs.rmSync('./test/tmp', { recursive: true, force: true })
